@@ -1,0 +1,27 @@
+{
+    "name": "bouncer",
+    "version": "0.0.1",
+    "description": "Connect middleware for programatically bouncing back responses to your tests via an HTTP server.  Useful for UI testing without a real backend server",
+    "keywords": [
+        "bounce",
+        "integration",
+        "testing",
+        "middleware"
+    ],
+    "repository": "https://github.com/garytaylor/bouncer.git",
+    "author": "Gary Taylor <gary.taylor@hismessages.com>",
+    "dependencies": {
+        "underscore": ">= 1.6.0"
+    },
+    "devDependencies": {
+        "jasmine-node": ">= 1.13.1"
+    },
+    "licenses": "MIT",
+    "main": "./index.js",
+    "engines": {
+        "node": ">= 0.10.0"
+    },
+    "scripts": {
+        "test": "jasmine-node"
+    }
+}
