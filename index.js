@@ -37,7 +37,8 @@ var fs = require('fs');
  */
 
 exports.bouncer = function (options) {
-    var connectRoute, commandController;
+    var connectRoute, commandController, jsonBody;
+    jsonBody = require("body/json")
     commandController = require('./lib/controllers/command');
     connectRoute = require('connect-route')(function (router) {
         router.post('/command/createResponse', commandController.createResponse);
@@ -53,17 +54,19 @@ exports.bouncer = function (options) {
         /**
          * @TODO Take note of the command url - for now it is hard coded
          */
-        connectRoute(req, res, function () {
-            if (req.url.match(/^\/gary\.json/)) {
-                body = '{"name": "Gary Taylor"}';
-                res.writeHead(200, {
-                    'Content-Length': body.length,
-                    'Content-Type': 'application/json'
-                });
-                res.end(body, 'utf8');
-                return;
-            }
-            next();
+        jsonBody(req, res, function () {
+            connectRoute(req, res, function () {
+                if (req.url.match(/^\/gary\.json/)) {
+                    body = '{"name": "Gary Taylor"}';
+                    res.writeHead(200, {
+                        'Content-Length': body.length,
+                        'Content-Type': 'application/json'
+                    });
+                    res.end(body, 'utf8');
+                    return;
+                }
+                next();
+            });
         });
     }
 

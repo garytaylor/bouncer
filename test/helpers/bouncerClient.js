@@ -16,7 +16,7 @@ exports.client = function Client() {
         },
         postJson: function (url, params, res, next) {
             var req;
-            req = new Request('POST', url, params);
+            req = new Request('POST', url, params, {});
             bouncer(req, res, next);
         }
     };

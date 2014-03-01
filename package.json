@@ -18,7 +18,8 @@
   },
   "dependencies": {
     "underscore": ">= 1.6.0",
-    "connect-route": ">= 0.1.4"
+    "connect-route": ">= 0.1.4",
+    "body": "4.4.2"
   },
   "devDependencies": {
     "jasmine-node": ">= 1.13.1",
