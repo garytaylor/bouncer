@@ -10,6 +10,8 @@
  */
 
 var fs = require('fs');
+var _ = require('underscore');
+var request = require('request');
 
 /**
  * Bouncer:
@@ -37,12 +39,14 @@ var fs = require('fs');
  */
 
 exports.bouncer = function (options) {
-    var connectRoute, commandController, jsonBody;
-    jsonBody = require("body/json")
+    var connectRoute, commandController, jsonBody, router;
+    jsonBody = require("body/json");
     commandController = require('./lib/controllers/command');
-    connectRoute = require('connect-route')(function (router) {
+    connectRoute = require('connect-route')(function (_router_) {
+        router = _router_;
         router.post('/command/createResponse', commandController.createResponse);
     });
+    commandController.setRouter(router);
     options = options || {};
     /**
      * @param {IncomingMessage} req
@@ -54,7 +58,7 @@ exports.bouncer = function (options) {
         /**
          * @TODO Take note of the command url - for now it is hard coded
          */
-        jsonBody(req, res, function () {
+        function bounceRouter () {
             connectRoute(req, res, function () {
                 if (req.url.match(/^\/gary\.json/)) {
                     body = '{"name": "Gary Taylor"}';
@@ -67,7 +71,36 @@ exports.bouncer = function (options) {
                 }
                 next();
             });
-        });
+        }
+        if (req.method === 'POST') {
+            jsonBody(req, res, function (err, body) {
+                req.jsonBody = body;
+                bounceRouter();
+            });
+        } else {
+            bounceRouter();
+        }
     }
 
 };
+/**
+ * BouncerClient:
+ *
+ * The bouncer client is used within the test suite as a simple helper to send commands to bouncer.
+ *
+ *
+ *
+ * @param options
+ * @returns {bouncerClient}
+ */
+exports.bouncerClient = function () {
+    function bouncerClient(options) {
+        this.options = _.extend({commandUrl: '/command'}, options);
+    }
+    _.extend(bouncerClient.prototype, {
+        sendCmd: function (cmd, json) {
+            request.post(_.extend({}, {url: this.options.baseUrl + this.options.commandUrl + '/' + cmd, json: json}));
+        }
+    });
+    return bouncerClient;
+}

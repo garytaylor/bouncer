@@ -19,12 +19,14 @@
   "dependencies": {
     "underscore": ">= 1.6.0",
     "connect-route": ">= 0.1.4",
-    "body": "4.4.2"
+    "body": "4.4.2",
+    "request": "2.34.0"
   },
   "devDependencies": {
     "jasmine-node": ">= 1.13.1",
     "grunt": ">= 0.4.2",
-    "grunt-jasmine-node": ">= 0.1.0"
+    "grunt-jasmine-node": ">= 0.1.0",
+    "proxyquire": ">= 0.5.2"
   },
   "licenses": "MIT",
   "main": "./index.js",
